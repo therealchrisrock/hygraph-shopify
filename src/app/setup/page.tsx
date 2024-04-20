@@ -1,10 +1,8 @@
 import React from "react";
 import Configure from "@/app/setup/configure";
 import {Button} from "@/components/ui/button";
-import {shopify} from "@/app/shopify/shopifyClient";
 import {SubmitButton} from "@/components/RscActions.client";
-import * as fs from "fs";
-import {migrateAll} from "@/app/setup/migrate";
+import {migrateAll} from "@/app/setup/migrate.server";
 
 
 export default function SetupElement() {

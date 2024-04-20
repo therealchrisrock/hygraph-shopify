@@ -1,11 +1,14 @@
+"use server"
 
 import {shopify} from "@/app/shopify/shopifyClient";
 import { createInterface } from 'readline';
 import { Readable } from 'stream';
 import {hygraph} from "@/app/hygraph/client";
 import Bottleneck from "bottleneck";
+import * as Sentry from "@sentry/nextjs";
 
 async function migrateProducts() {
+
     const url = await shopify.createBulkQuery(shopify.bulkProductQuery);
     if (!url) {
         console.error("no response from bulk operation run query")
@@ -23,20 +26,21 @@ async function migrateCollections() {
     await processJsonLines(url, async (line: string) => await hygraph.migrateCollection(line))
 }
 export async function migrateAll() {
-    "use server"
-    await migrateProducts()
-    await migrateCollections();
+    await Sentry.startSpan({ name: "Bulk Shopify Migration" }, async () => {
+        try {
+            await migrateProducts()
+            await migrateCollections();
+        } catch (e) {
+            throw new Error("Failed to migrate Shopify product data", e)
+        }
+    });
     return
 }
 
-
-// Define the type for a JSON object
-type JsonObject = { [key: string]: any };
-
 async function processJsonLines(url: string, onLine: (line: string) => Promise<any>, onEnd?: (ids: string[]) => Promise<any>): Promise<void> {
     const limiter = new Bottleneck({
-        reservoir: 4, // initial value
-        reservoirRefreshAmount: 4,
+        reservoir: 2, // initial value
+        reservoirRefreshAmount: 2,
         reservoirRefreshInterval: 1000, // must be divisible by 250
         // also use maxConcurrent and/or minTime for safety
         maxConcurrent: 1,
