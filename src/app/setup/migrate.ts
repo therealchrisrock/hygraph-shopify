@@ -16,7 +16,6 @@ async function migrateProducts() {
 
 async function migrateCollections() {
     const url = await shopify.createBulkQuery(shopify.bulkCollectionQuery);
-    console.log(url)
     if (!url) {
         console.error("no response from bulk operation run query")
         return
@@ -25,7 +24,7 @@ async function migrateCollections() {
 }
 export async function migrateAll() {
     "use server"
-  //  await migrateProducts()
+    await migrateProducts()
     await migrateCollections();
     return
 }
