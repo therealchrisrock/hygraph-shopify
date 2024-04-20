@@ -1,0 +1,9 @@
+query GetShopifyCollections {
+    collections(first: 250) {
+        edges {
+            node {
+                ...ShopifyCollection
+            }
+        }
+    }
+}

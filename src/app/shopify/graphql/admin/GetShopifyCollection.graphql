@@ -1,0 +1,17 @@
+query GetShopifyCollection($id: ID!) {
+    collection(id: $id)  {
+        id
+        products(first: 250) {
+            edges {
+                node {
+                    ...ShopifyProduct
+                }
+            }
+        }
+    }
+}
+fragment ShopifyProduct on Product {
+    id
+    title
+    handle
+}

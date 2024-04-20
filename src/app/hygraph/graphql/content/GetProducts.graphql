@@ -1,0 +1,14 @@
+query GetHygraphProducts($after: String) {
+    productsConnection(first: 100, after:$after) {
+        edges {
+            node {
+                id
+                gid
+            }
+        }
+        pageInfo {
+            hasNextPage
+            endCursor
+        }
+    }
+}

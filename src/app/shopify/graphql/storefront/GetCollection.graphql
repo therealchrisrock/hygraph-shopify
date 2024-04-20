@@ -1,0 +1,5 @@
+query GetCollection($id: ID!) {
+    collection(id: $id)  {
+        ...Collection
+    }
+}

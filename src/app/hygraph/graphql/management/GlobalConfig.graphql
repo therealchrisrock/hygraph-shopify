@@ -1,0 +1,22 @@
+query GlobalConfig {
+    viewer {
+        ... on UserViewer {
+            id
+            app(apiId: "k9-charger") {
+                id
+                apiId
+                elements {
+                    apiId
+                    ... on PageAppElement {
+                        id
+                        name
+                        apiId
+                        config
+                        type
+                    }
+                    config
+                }
+            }
+        }
+    }
+}

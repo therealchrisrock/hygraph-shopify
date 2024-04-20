@@ -1,0 +1,40 @@
+mutation CreateProduct($data: ProductCreateInput!) {
+    createProduct(data:$data) {
+        id
+        gid
+        slug
+        title
+        legacyResourceId
+    }
+}
+mutation UpdateProduct($where: ProductWhereUniqueInput!, $data: ProductUpdateInput!) {
+    updateProduct(where: $where , data:$data) {
+        slug
+        title
+    }
+}
+mutation DeleteProduct($where: ProductWhereUniqueInput!) {
+    deleteProduct(where: $where) {
+        gid
+    }
+}
+
+mutation UpsertProduct($where: ProductWhereUniqueInput!, $upsert: ProductUpsertInput!) {
+    upsertProduct(where: $where , upsert: $upsert) {
+        id
+    }
+    publishProduct(where: $where, to: PUBLISHED) {
+        id
+    }
+}
+
+mutation PublishMany($where: ProductManyWhereInput!) {
+    publishManyProductsConnection(where: $where, to: PUBLISHED) {
+        edges {
+            node {
+                id
+            }
+        }
+    }
+
+}

@@ -1,0 +1,11 @@
+query GetShopifyCollectionInfo($id: ID!){
+    collection(id: $id ) {
+        ...CollectionInfo
+    }
+}
+fragment CollectionInfo on Collection {
+    id
+    title
+    handle
+    description
+}

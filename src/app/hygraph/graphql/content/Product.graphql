@@ -1,0 +1,5 @@
+query GetProduct($where: ProductWhereUniqueInput!) {
+    product(where: $where) {
+        slug
+    }
+}

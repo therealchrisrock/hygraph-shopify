@@ -1,0 +1,6 @@
+fragment Collection on Collection {
+    id
+    title
+    handle
+    description
+}

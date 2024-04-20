@@ -1,0 +1,28 @@
+mutation CreateCollection($data: CollectionCreateInput!) {
+    createCollection(data:$data) {
+        id
+        gid
+        slug
+        title
+        legacyResourceId
+    }
+}
+mutation UpdateCollection($where: CollectionWhereUniqueInput!, $data: CollectionUpdateInput!) {
+    updateCollection(where: $where , data:$data) {
+        slug
+        title
+    }
+}
+mutation DeleteCollection($where: CollectionWhereUniqueInput!) {
+    deleteCollection(where: $where) {
+        gid
+    }
+}
+mutation UpsertCollection($where: CollectionWhereUniqueInput!, $upsert: CollectionUpsertInput!) {
+    upsertCollection(where: $where, upsert: $upsert) {
+        id
+    }
+    publishCollection(where: $where) {
+        id
+    }
+}

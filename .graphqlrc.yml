@@ -1,0 +1,55 @@
+projects:
+  hygraph:
+    overwrite: true
+    schema:
+      - ${HYGRAPH_MGMT_URL}:
+          headers:
+            Authorization: "Bearer ${HYGRAPH_MGMT_TOKEN}"
+    documents: ./src/app/graphql/hygraph/management/**/*.{graphql,ts}
+    extensions:
+      codegen:
+        generates:
+          ./src/__generated__/hygraph-managementapi.generated.ts:
+            plugins:
+              - typescript
+              - fragment-matcher
+              - typescript-operations
+              - typescript-graphql-request
+            config:
+              dedupeFragment: true
+  default:
+    overwrite: true
+    schema:
+      - ${HYGRAPH_CONTENT_URL}:
+          headers:
+            Authorization: "Bearer ${HYGRAPH_CONTENT_TOKEN}"
+    documents: ./src/app/hygraph/graphql/content/**/*.{graphql,ts}
+    extensions:
+      codegen:
+        generates:
+          ./src/__generated__/hygraph-contentapi.generated.ts:
+            plugins:
+              - typescript
+              - fragment-matcher
+              - typescript-operations
+              - typescript-graphql-request
+            config:
+              dedupeFragment: true
+  shop:
+    overwrite: true
+    schema:
+      - ${SHOP_URL}:
+          headers:
+            'X-Shopify-Access-Token': ${SHOP_TOKEN}
+    documents: ./src/app/shopify/graphql/admin/**/*.{graphql,ts}
+    extensions:
+      codegen:
+        generates:
+          ./src/__generated__/shopify-adminapi.generated.ts:
+            plugins:
+              - typescript
+              - fragment-matcher
+              - typescript-operations
+              - typescript-graphql-request
+            config:
+              dedupeFragment: true

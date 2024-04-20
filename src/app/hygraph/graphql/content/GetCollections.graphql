@@ -1,0 +1,6 @@
+query GetHygraphCollections {
+    collections {
+        id
+        gid
+    }
+}
