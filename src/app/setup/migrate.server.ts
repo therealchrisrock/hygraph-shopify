@@ -31,7 +31,8 @@ export async function migrateAll() {
             await migrateProducts()
             await migrateCollections();
         } catch (e) {
-            throw new Error("Failed to migrate Shopify product data", e)
+            console.error(e)
+            throw new Error("Failed to migrate Shopify product data")
         }
     });
     return

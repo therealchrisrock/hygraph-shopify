@@ -7,6 +7,7 @@ import {Spinner} from "@/components/ui/spinner";
 
 
 export function SubmitButton({children}: {children: ReactNode}) {
+    'use client'
     const { pending } = useFormStatus()
     return <Button type={'submit'} disabled={pending}>{pending ? <Spinner />: children}</Button>
 }
