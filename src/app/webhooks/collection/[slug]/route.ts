@@ -7,7 +7,6 @@ export const POST = async (
 ) => {
     try {
         const res = await request.json()
-        console.log(res)
         const {admin_graphql_api_id:gid, handle: slug, title, id} = res
 
         if (params.slug === "create" || params.slug === 'update') {
@@ -19,7 +18,6 @@ export const POST = async (
         if (params.slug === 'delete') {
             await hygraph.deleteCollection(gid)
         }
-        console.log(res)
     } catch (error) {
         // @ts-ignore
         return new Response(`Webhook error: ${error.message}`, {

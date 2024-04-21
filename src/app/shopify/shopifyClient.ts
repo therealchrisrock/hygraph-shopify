@@ -6,6 +6,7 @@ import crypto from "crypto";
 import invariant from "tiny-invariant";
 
 import {sleep} from "@/lib/utils";
+import * as Sentry from "@sentry/nextjs";
 
 const MAX_TIMEOUT = 600 * 1000
 const POLL_INTERVAL = 5 * 1000
@@ -163,19 +164,17 @@ class ShopifyHelper {
         return flattenedShopAll;
     }
     public async createBulkQuery(query: string) {
-        try {
-            const {bulkOperationRunQuery}= await this.sdk.BulkOperationRunQuery({query})
-            if (!bulkOperationRunQuery || bulkOperationRunQuery.userErrors.length) {
-                console.error(bulkOperationRunQuery)
-                throw new Error('Error occurred during bulk operation run query');
-            }
-            const url = await this.pollBulkOperation()
-            if (!url) return
-            return url;
-        } catch (e) {
-            console.error(e)
-            return
-        }
+        return await Sentry.startSpan({ name: "Create Bulk Query Operation" }, async () => {
+                const {bulkOperationRunQuery}= await this.sdk.BulkOperationRunQuery({query})
+                if (!bulkOperationRunQuery || bulkOperationRunQuery.userErrors.length) {
+                    console.error(bulkOperationRunQuery)
+                    throw new Error('Error occurred during bulk operation run query');
+                }
+                const url = await this.pollBulkOperation()
+                if (!url) throw new Error('Failed to retrieve bulk operation response URL');
+                return url;
+        })
+
     }
 }
 

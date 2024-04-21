@@ -8,8 +8,8 @@ import Bottleneck from "bottleneck";
 import * as Sentry from "@sentry/nextjs";
 
 async function migrateProducts() {
-
-    const url = await shopify.createBulkQuery(shopify.bulkProductQuery);
+    const query = shopify.bulkProductQuery
+    const url = await shopify.createBulkQuery(query);
     if (!url) {
         console.error("no response from bulk operation run query")
         return
@@ -18,7 +18,8 @@ async function migrateProducts() {
 }
 
 async function migrateCollections() {
-    const url = await shopify.createBulkQuery(shopify.bulkCollectionQuery);
+    const query = shopify.bulkCollectionQuery
+    const url = await shopify.createBulkQuery(query);
     if (!url) {
         console.error("no response from bulk operation run query")
         return
@@ -26,13 +27,13 @@ async function migrateCollections() {
     await processJsonLines(url, async (line: string) => await hygraph.migrateCollection(line))
 }
 export async function migrateAll() {
-    await Sentry.startSpan({ name: "Bulk Shopify Migration" }, async () => {
+    await Sentry.startSpan({ name: "Full Shopify Migration" }, async () => {
         try {
-            await migrateProducts()
+            await migrateProducts();
             await migrateCollections();
         } catch (e) {
             console.error(e)
-            throw new Error("Failed to migrate Shopify product data")
+            throw new Error("Failed to migrate Shopify product & collection data")
         }
     });
     return
