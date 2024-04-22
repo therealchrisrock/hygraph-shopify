@@ -6,9 +6,13 @@ import {migrateAll} from "@/app/setup/migrate.server";
 
 
 export default function SetupElement() {
-    async function flushCache() {
+    async function purgeCache() {
         "use server"
-
+        const res = await fetch('/api/purge-cache', {
+            headers: {
+                Authorization: process.env.APP_TOKEN as string
+            }
+        });
     }
 
 
@@ -20,8 +24,8 @@ export default function SetupElement() {
                 <form action={migrateAll}>
                     <SubmitButton>Migrate Shopify Data</SubmitButton>
                 </form>
-                <form action={flushCache}>
-                    <Button variant={'destructive'}>Flush Cache</Button>
+                <form action={purgeCache}>
+                    <Button variant={'destructive'} type={'submit'}>Purge Cache</Button>
                 </form>
             </div>
         </section>

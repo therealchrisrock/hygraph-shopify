@@ -6,8 +6,7 @@ import {
     ProductCreateInput,
     ProductUpdateInput, ProductUpsertInput
 } from "@/__generated__/hygraph-contentapi.generated";
-import {JsonObject} from "type-fest";
-
+import {verifyWebhookSignature} from '@hygraph/utils'
 export class HygraphHelper {
     private client: GraphQLClient;
     private sdk: ReturnType<typeof getSdk>;
@@ -38,7 +37,6 @@ export class HygraphHelper {
                 where: {gid},
                 upsert
             })
-            console.log('product successfully upserted')
             return {status: "success", data: upsertProduct}
         } catch (e) {
             console.log(e)
@@ -114,11 +112,9 @@ export class HygraphHelper {
                 where: {gid},
                 upsert
             })
-            console.log('colletion successfully upserted')
             return {status: "success", data: upsertCollection}
         } catch (e) {
             console.log(e)
-            console.error('failed to upsert product')
             return {status: "error"}
         }
     }
@@ -144,11 +140,15 @@ export class HygraphHelper {
         }
 
     }
+    public verifyWebhookSignature(signature: string, body?: any,) {
+        const secret = process.env.HYGRAPH_WEBHOOK_SIG ?? ''
+        return verifyWebhookSignature({ body, signature, secret });
+
+    }
     public async deleteCollection(gid: string) {
         try {
             const {deleteCollection} = await this.sdk.DeleteCollection({where: {gid}})
             console.log('Collection successfully delete')
-            console.log(deleteCollection)
             return {status: "success", data: deleteCollection}
         } catch (e) {
             console.error('failed to delete product', e)
